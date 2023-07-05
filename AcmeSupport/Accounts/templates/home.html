@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="p-5 h-screen bg-gray-100">
+  <div class="flex">
+
+    <h1 class="text-xl mb-2">My Tickets</h1>
+    <button
+    class="bg-[#38bdf8] text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300"
+    
+    
+  >
+  <a href="{% url 'Accounts:create_ticket' %}">ADD Ticket</a>
+   
+  </button>
+  </div>
+ 
+ {% if tickets %}
+  
+ 
+   <div class="overflow-auto rounded-lg shadow hidden md:block">
+     <table class="w-full">
+       <thead class="bg-gray-50 border-b-2 border-gray-200">
+       <tr>
+           <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">ID</th>
+           <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Subject</th>
+         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Priority</th>
+         <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">body</th>
+         <th class="p-3 text-sm font-semibold tracking-wide text-left">Created_at</th>
+         <!-- <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">password</th> -->
+       </tr>
+       </thead>
+       <tbody class="divide-y divide-gray-100">
+           {% for ticket in tickets %}
+       <tr class="bg-white">
+           <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+               <a href="#" class="font-bold text-blue-500 hover:underline">{{ ticket.id }}</a>
+             </td>
+         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+           <a href="#" class="font-bold text-blue-500 hover:underline">{{ ticket.subject }}</a>
+         </td>
+         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+          {{ ticket.priority }}
+         </td>
+         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+         <span
+           class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">{{ticket.body}}</span>
+         </td>
+         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ ticket.created_at }}</td>
+        
+       </tr>
+       {% endfor %}
+      
+      
+   </tbody>
+</table>
+</div>
+{% else %}
+<h1 class="text-2xl font-bold mb-4">No tickets</h1>
+ {% endif %}
+ 
+
+</div>
+{% else %}
+<!-- <p>You are not authorized to view this page. Redirecting to the home page...</p> -->
+<script>
+    setTimeout(function() {
+      window.location.href = "{% url 'Accounts:home' %}";
+    }, 3000);  // Redirect after 3 seconds
+  </script>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if error_message %}
+<p>
+    <strong>{{ error_message }}</strong>
+</p>
+{% endif %}
+
+
+<form method="post" class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    {% csrf_token %}
+    <span class="mb-3 text-4xl font-bold">Add User</span>
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+        <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.errors.email %}border-red-500{% endif %}"
+            id="email"
+            type="email"
+            placeholder="Enter email"
+            name="email"
+        >
+
+        <p class="text-red-500 text-xs italic">{{ form.errors.email }}</p>
+
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="phone_number">Phone Number</label>
+        <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.errors.phone_number %}border-red-500{% endif %}"
+            id="phone_number"
+            type="text"
+            placeholder="Enter phone number"
+            name="phone_number"
+        >
+      
+        <p class="text-red-500 text-xs italic">{{ form.errors.phone_number }}</p>
+
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password1">Password</label>
+        <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.errors.password1 %}border-red-500{% endif %}"
+            id="password1"
+            type="password"
+            placeholder="********"
+            name="password1"
+        >
+    
+        <p class="text-red-500 text-xs italic">{{ form.errors.password1 }}</p>
+
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password2">Confirm Password</label>
+        <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.errors.password2 %}border-red-500{% endif %}"
+            id="password2"
+            type="password"
+            placeholder="********"
+            name="password2"
+        >
+     
+        <p class="text-red-500 text-xs italic">{{ form.errors.password2 }}</p>
+
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="password2">Role</label>
+      <input
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.errors.password2 %}border-red-500{% endif %}"
+          id="Role"
+          type="Role"
+          placeholder="********"
+          name="Role"
+      >
+   
+      <p class="text-red-500 text-xs italic">{{ form.errors.Role }}</p>
+
+  </div>
+  
+    <!-- <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="department">Department</label>
+      <select class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.errors.department %}border-red-500{% endif %}" id="department">
+        <option value="">Select Department</option>
+        {% for department in departments %}
+          <option value="{{ department.id }}" {% if form.department.value == department.id %}selected{% endif %}>{{ department.name }}</option>
+        {% endfor %}
+      </select>
+      {% if form.errors.department %}
+        <p class="text-red-500 text-xs italic">{{ form.errors.department }}</p>
+      {% endif %}
+    </div> -->
+    {{form.department}}
+    <div class="flex items-center justify-center">
+        <input class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" value="Create User">
+    </div>
+</form>
+{% endblock content %}

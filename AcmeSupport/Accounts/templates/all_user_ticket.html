@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#deleteForm').on('submit', function(e) {
+      e.preventDefault();
+      var ticketId = $('#ticketId').val();
+      var url = '/delete-ticket/' + ticketId + '/';
+      $.ajax({
+        url: url,
+        type: 'DELETE',
+        success: function(response) {
+          $('#result').text(response);
+        },
+        error: function(xhr, status, error) {
+          $('#result').text('Failed to delete the ticket');
+        }
+      });
+    });
+  });
+</script>
+  {% if user.is_authenticated and user.is_staff %}
+    <div class="p-5 h-screen bg-gray-100">
+        <h1 class="text-xl mb-2">User Ticket</h1>
+        <div class="overflow-auto rounded-lg shadow hidden md:block">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b-2 border-gray-200">
+                    <tr>
+                        <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">ID</th>
+                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Subject</th>
+                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Priority</th>
+                        <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">body</th>
+                        <th class=" p-3 text-sm font-semibold tracking-wide text-left">Created_at</th>
+                        <th class=" wp-3 text-sm font-semibold tracking-wide text-left">Email</th>
+                        <th class=" wp-3 text-sm font-semibold tracking-wide text-left">Delete</th>
+                        <!-- <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Email</th> -->
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for ticket in tickets %}
+                    <tr class="bg-white">
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                            <a href="#" class="font-bold text-blue-500 hover:underline">{{ ticket.id }}</a>
+                        </td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                            <a href="#" class="font-bold text-blue-500 hover:underline">{{ ticket.subject }}</a>
+                        </td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                            {{ ticket.priority }}
+                        </td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                            <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">{{ticket.description}}</span>
+                        </td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ticket.created_at}}</td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ticket.email}}</td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                          <form id="deleteForm" method="post">
+                            {% csrf_token %}
+                            <button value="Delete" type="submit">
+
+                              <a href="{% url 'Accounts:delete_ticket' ticket.id %}">delete</a>
+                            </button>
+                            <!-- <input type="hidden" name="_method" value="delete">
+                            <input type="submit" value="Delete Ticket"> -->
+                          </form>
+                          
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+  {% else %}
+    <p>You are not authorized to view this page. Redirecting to the home page...</p>
+  {% endif %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    // Attach event listeners to the delete buttons
+    $('.delete-button').on('click', function() {
+      var ticketId = $(this).data('ticket-id');
+      var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+
+      // Send the AJAX request to delete the ticket
+      $.ajax({
+        url: '/delete-ticket/' + ticketId + '/',
+        type: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken
+        },
+        success: function(response) {
+          if (response.success) {
+            // Reload the page or update the ticket list
+            location.reload();
+          } else {
+            // Display the error message
+            console.error(response.error_message);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        }
+      });
+    });
+  </script>
+{% endblock content %}

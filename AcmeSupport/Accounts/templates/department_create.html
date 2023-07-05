@@ -1,0 +1,32 @@
+<!-- department_create.html -->
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<form class="m-4 max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="post">
+    {% csrf_token %}
+    <h1>Add Department</h1>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
+      <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Enter name" name="name">
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Description</label>
+      <textarea class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" placeholder="Enter description" name="description"></textarea>
+    </div>
+    <div class="flex items-center justify-center">
+      <input class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" value="Submit">
+    </div>
+  </form>
+  
+    
+{% endblock content %}
+    
+  <!-- <h2>Create Department</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create</button>
+  </form> -->
+

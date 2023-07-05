@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+{% if user.is_authenticated and user.is_staff %}
+<div class="p-5 h-screen bg-gray-100">
+    <h1 class="flex">
+
+        <h1 class="text-xl mb-2">Departments</h1>
+        <button
+        class="bg-[#38bdf8] text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300"
+        
+        
+      >
+      <a href="{% url 'Accounts:create-department' %}">Add Department</a>
+       
+      </button>
+    </h1>
+ 
+    <div class="overflow-auto rounded-lg shadow hidden md:block">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b-2 border-gray-200">
+        <tr>
+            <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Department_Name</th>
+          <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Created_BY</th>
+          <th class="p-3 text-sm font-semibold tracking-wide text-left">Created_at</th>
+          <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Edit</th>
+          <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Delete</th>
+          <!-- <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">password</th> -->
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+            {% for department in departments %}
+        <tr class="bg-white">
+            <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                <a href="#" class="font-bold text-blue-500 hover:underline">{{ department.name }}</a>
+              </td>
+          <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+            <a href="#" class="font-bold text-blue-500 hover:underline">{{ department.created_by }}</a>
+          </td>
+          <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+           {{ department.created_at  }}
+          </td>
+          <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+          <span
+            class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50"><a href="{% url 'Accounts:edit-department' department.id %}">Edit</a></span>
+          </td>
+          <td class="p-3 text-sm text-gray-700 whitespace-nowrap"><a class="delete-button" data-department-id="{{ department.id }}">Delete</a></td>
+         
+        </tr>
+        {% endfor %}
+       
+       
+    </tbody>
+</table>
+</div>
+ 
+
+</div>
+{% else %}
+<p>You are not authorized to view this page. Redirecting to the home page...</p>
+<script>
+    setTimeout(function() {
+      window.location.href = "{% url 'home' %}";
+    }, 3000);  // Redirect after 3 seconds
+  </script>
+{% endif %}
+<!-- Add this inside your department_list.html template -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  // Function to handle the delete department request
+  function deleteDepartment(departmentId) {
+    $.ajax({
+      url: `/delete_department/${departmentId}/`,
+      type: 'DELETE',
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+      },
+      success: function() {
+        alert('Department deleted successfully');
+        window.location.reload(); // Refresh the page after successful deletion
+      },
+      error: function() {
+        alert('An error occurred while deleting the department');
+      }
+    });
+  }
+
+  // Event listener for the delete button
+  $('.delete-button').click(function() {
+    var departmentId = $(this).data('department-id');
+    if (confirm('Are you sure you want to delete this department?')) {
+      deleteDepartment(departmentId);
+    }
+  });
+});
+</script>
+
+{% endblock content %}
+    
